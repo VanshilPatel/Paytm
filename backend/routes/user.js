@@ -4,7 +4,7 @@ import { User } from "../db";
 
 const express = require("express");
 const { z } = require("zod");
-const router = express.Router();
+export const router = express.Router();
 const jwt = require('jsonwebtoken')
 
 
