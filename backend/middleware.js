@@ -12,7 +12,6 @@ function authMiddleware(req,res,next){
         token = authHeader.replace('Bearer', '');
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
-
         next();
     }
     catch{
@@ -25,3 +24,6 @@ function authMiddleware(req,res,next){
 }
 
 }
+
+
+

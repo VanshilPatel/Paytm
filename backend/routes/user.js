@@ -17,7 +17,7 @@ const userValid = z.object({
 });
 
 router.post("/signup", async (req, res) => {
-  const { sucess } = userValid.safeParse(req.body);
+  const { success } = userValid.safeParse(req.body);
   //   .safeParse(data:unknown): { success: true; data: T; } | { success: false; error: ZodError; }
 
   if (!success) {
@@ -46,7 +46,6 @@ router.post("/signup", async (req, res) => {
     token: token,
   });
 });
-
 
 
 
@@ -82,4 +81,57 @@ router.post("/signin", async (req,res)=>{
   })
 
  
+})
+
+
+const updatedBody = z.object({
+  firstname : z.string().optional(),
+  lastname : z.string().optional(),
+  password : z.string().optional(),
+
+})
+
+router.put('/', authMiddleware, (req,res)=>{
+   
+  const {success} = updatedBody.safeParse(req.body);
+
+  if(!success){
+    res.status(411).json({
+      message: "Error while updating information"
+    }) } 
+
+  await User.updateOne({_id : req.userId}, req.body);
+
+
+  res.json({
+    message: "Updated successfully"
+})
+})
+
+
+
+router.get("/bulk", (req,res)=>{
+  let filter = req.query.filter;
+
+  const users = await User.find({
+    $or: [{
+      firstName: {
+          "$regex": filter
+      }
+  }, {
+      lastName: {
+          "$regex": filter
+      }
+  }]
+  });
+
+  res.json({
+    user: users.map(user => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id
+    }))
+})
+
 })
