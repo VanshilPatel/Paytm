@@ -1,10 +1,11 @@
-import { JWT_SECRET } from "../config";
-import { User } from "../db";
+const { JWT_SECRET } = require("../config");
+const { User }  = require("../db");
+const {authMiddleware} = require('../middleware');
 
 
 const express = require("express");
 const { z } = require("zod");
-export const router = express.Router();
+ const router = express.Router();
 const jwt = require('jsonwebtoken')
 
 
@@ -38,6 +39,11 @@ router.post("/signup", async (req, res) => {
   });
 
   const userId = user._id;
+
+  await Account.create({
+    userId,
+    balance: 1 + Math.random() * 10000
+})
 
   const token = jwt.sign(userId, JWT_SECRET);
 
@@ -91,7 +97,7 @@ const updatedBody = z.object({
 
 })
 
-router.put('/', authMiddleware, (req,res)=>{
+router.put('/', authMiddleware, async (req,res)=>{
    
   const {success} = updatedBody.safeParse(req.body);
 
@@ -110,7 +116,7 @@ router.put('/', authMiddleware, (req,res)=>{
 
 
 
-router.get("/bulk", (req,res)=>{
+router.get("/bulk", async (req,res)=>{
   let filter = req.query.filter;
 
   const users = await User.find({
@@ -135,3 +141,7 @@ router.get("/bulk", (req,res)=>{
 })
 
 })
+
+
+
+module.exports = router;

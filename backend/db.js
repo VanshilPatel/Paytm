@@ -1,17 +1,5 @@
-import { Schema } from 'zod';
-
-const mongoose = require('mongoose');
-
-
-
-const username = encodeURIComponent("vanshil");
-const password = encodeURIComponent("Vv#9426422022");
-
-let uri = 'mongodb+srv://${username}:${password}@cluster0.y9eqc21.mongodb.net/'
-
-
-mongoose.connect(uri);
-
+const { default: mongoose } = require('mongoose');
+const { Schema } = require('zod');
 
 
 const UserSchema  = new mongoose.Schema({
@@ -53,6 +41,10 @@ const AccountSchema = new mongoose.Schema({
 
 })
 
-export const User = mongoose.model('User', UserSchema )
-export const Account = mongoose.model('Account', AccountSchema)
+ const User = mongoose.model('User', UserSchema )
+ const Account = mongoose.model('Account', AccountSchema)
 
+module.exports = {
+	User,
+    Account
+};

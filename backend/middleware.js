@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-import { JWT_SECRET } from "../config";
+const { JWT_SECRET } = require ("../backend/config");
 
 
 function authMiddleware(req,res,next){
@@ -18,12 +18,11 @@ function authMiddleware(req,res,next){
         res.json({message : "Invalid token"}).status(401);
     }
 
+}
 
-  module.exports = {
+
+module.exports = {
     authMiddleware
 }
-
-}
-
 
 
