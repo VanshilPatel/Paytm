@@ -1,3 +1,4 @@
+import axios from "axios"
 import { useState } from "react"
 import { BottomWarning } from "../components/BottomWarning"
 import { Button } from "../components/Button"
@@ -5,15 +6,22 @@ import { Heading } from "../components/Heading"
 import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 
-export const Signup = () => {
+export const SignUp = () => {
 
     const [firstName, setFirstName ] = useState("")
     const [lastName, setLastName ] = useState("")
     const [username, setUsername ] = useState("")
     const [password, setPassword ] = useState("")
 
-    function handleSignUp(){
-        fetch("")
+    async function handleSignUp(){
+      const response  = await axios.post("https://localhost:3000/api/v1/user/signup", {
+        username : username,
+        firstName : firstName,
+        lastName : lastName,
+        password : password
+      })
+
+      localStorage.setItem("token", response.data.token);
     }
 
 
@@ -24,10 +32,10 @@ export const Signup = () => {
         <SubHeading label={"Enter your infromation to create an account"} />
         <InputBox onChange={e => {
             setFirstName(e.target.value)
-        }}placeholder="John" label={"First Name"} />
+        }}placeholder="Vanshil" label={"First Name"} />
         <InputBox onChange={e => {
             setLastName(e.target.value)
-        }} placeholder="Doe" label={"Last Name"} />
+        }} placeholder="Vaghasiya" label={"Last Name"} />
         <InputBox onChange={e => {
             setUsername(e.target.value)
         }} placeholder="vanshilpatel12@gmail.com" label={"Email"} />
